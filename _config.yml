@@ -1,0 +1,9 @@
+author: Jianmin Chen
+baseurl: "/soupjs"
+github_username: jianmin-chen
+library_name: SoupJS
+library_link: https://github.com/jianmin-chen/soupjs
+library_description: >-
+    JavaScript library for web scraping
+url: "https://jianmin-chen.github.io"
+theme: techdoc-jekyll-theme
