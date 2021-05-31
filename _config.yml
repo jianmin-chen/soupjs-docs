@@ -6,7 +6,6 @@ library_link: https://github.com/jianmin-chen/soupjs
 library_description: >-
     JavaScript library for web scraping
 url: "https://jianmin-chen.github.io"
-theme: techdoc-jekyll-theme
 plugins_dir:
     - jekyll-remote-theme
 remote_theme: jianmin-chen/techdoc
