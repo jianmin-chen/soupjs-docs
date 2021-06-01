@@ -3,7 +3,7 @@ layout: post
 title: Docs
 ---
 
-As a module, SoupJS provides three classes/functions to the user - the `Tag` class, the `Soup` class, and the `scrape()` function.
+As a library, SoupJS provides three classes/functions to the user - the `Tag` class, the `Soup` class, and the `scrape()` function.
 ```javascript
 // Exports
 module.exports = {
@@ -12,11 +12,21 @@ module.exports = {
     scrape: scrape
 };
 ```
+The library is designed with a structure similar to the `fetch` API, but simplified.
+
+## Installation
+Obviously, to use the library, you have to install it first. Once you have [Node](https://nodejs.org/en/) and [NPM](https://www.npmjs.com/)(which comes with Node when you install it), you can simply run:
+```
+npm i soupjs-lib
+```
+
+## Code Notation
+The documentation below uses a certain code notation you may or may not be familiar with. For variables and properties, the notation for them is `<type of variable/property> <variable/property name>`. As for functions, the notation for them is `<return type> <function name>(<type of parameter><parameter name> = <parameter's default value, if any>, ...)`.
 
 ## Under the Hood
 To use SoupJS, it might be useful to find out how it works under the hood. Basically, you start by passing the URL of the website you want to scrape to `scrape()`. You can also pass in a file by adding an extra parameter to the function, discussed below.
 
-Depending on whether you're getting an online file or a local file, SoupJS will either use JavaScript's `fetch` API or Node's `fs` module to read the file.
+Depending on whether you're getting an online file or a local file, SoupJS will either use JavaScript's `fetch` API(provided by the filler library `node-fetch`) or Node's `fs`(i.e., filesystem) module to read the file.
 
 Once it does that, the function will create a new `Soup` object for the contents of the file. This object basically uses the contents of the file to create a new, virtual Document Object Model that you can search through.
 
@@ -26,7 +36,7 @@ When these element(s) are found, a `Tag` object is created for each one of them.
 
 ## `scrape()`
 ```javascript
-scrape(string location, string filetype="url")
+Soup scrape(string location, string filetype="url")
 ```
 Main function provided. `scrape()` is asynchronous, and takes in two parameters: `location`, or the location of the file, and `filetype`, which represents where the file is coming from.
 
@@ -40,16 +50,16 @@ Soup(string content)
 ```
 The `Soup` class takes a string `content` and creates a DOM based off of it. It has the following methods:
 ```javascript
-find(string selector)
-findAll(string selector, int limit=null)
+Tag find(string selector)
+array findAll(string selector, int limit=null)
 ```
 Both of them take a parameter `selector`, which represents the CSS selector being used to filter the document. `findAll()`, however, takes an extra optional parameter `limit` which represents the maximum number of elements to be returned. If the number of elements matching the selector is larger than `limit`, the elements returned will be capped at `limit`. Otherwise, all elements will be returned. By default, this is set to `null` so all elements are returned - *for large files, using `limit` is suggested so that overflow errors don't occur*.
 
 This class also has a couple of extra properties that can be used.
 ```javascript
-htmlContent
-document
-text
+string htmlContent
+object document
+string text
 ```
 These should be generally self-explanatory. `htmlContent` is the HTML of `content`, and `text` is the text of `content`. **`document` stores the actual virtual DOM, meaning you can directly access it if `find()` or `findAll()` can't be used for your purposes.**
 
@@ -59,22 +69,22 @@ Tag(Element element)
 ```
 The `Tag` class takes a DOM element, normally passed to it by the `Soup` class, and converts it to a easier to read and understand format. Once a `Tag` object is created, it will provide some useful properties:
 ```javascript
-tag
-text
-attrs
-htmlContent
-document
+string tag
+string text
+object attrs
+string htmlContent
+object document
 ```
 `tag` provides the tag name of the element(e.g., "p" for paragraph tags). `text` provides the inner text of the element, while `htmlContent` provides the inner HTML of the element.
 
-`attrs` contains all the attributes of the element. For multi-valued attributes likes classes, the `Tag` class will automatically split up the values into a array.
+`attrs` contains all the attributes of the element, and is a object, or dictonary, with a key-and-value structure. For multi-valued attributes like classes, the `Tag` class will automatically split up the values into a array.
 
-Finally, `document` stores a virtual DOM, within the scope of the element. **You can access it just like you can with the `document` property in the `Soup` class.**
+Finally, `document` stores a virtual DOM, within the scope of the element. **You can access it just like you can with the `document` property in the `Soup` class, if the methods described below can't be used for your purposes.**
 
 Like the `Soup` class, `Tag` also provides two methods for filtering elements.
 ```javascript
-getAttr(string attr)
-find(string selector)
-findAll(string selector, int limit=null)
+string getAttr(string attr)
+Tag find(string selector)
+array findAll(string selector, int limit=null)
 ```
 However, it also provides a extra method, `getAttr()`. This method takes the name of an attribute and returns what the element has for it. If the element doesn't have the provided attribute, it will return `undefined`.
